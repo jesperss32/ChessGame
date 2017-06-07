@@ -231,26 +231,44 @@ class ChessBoard:
     # method to check the movement of a king
     def check_movement_kings(self, begin_position, end_position):
         print('check movement of king')
-        return True
+        (x_begin, y_begin) = begin_position
+        (x_end, y_end) = end_position
+        if (x_begin == x_end and y_begin == y_end):
+            #print('move nog possible, no movement detected')
+            return False
+        elif (x_begin == x_end):
+            #print ('move possible equal x')
+            return True
+        elif (y_begin == y_end):
+            #print ('move possible equal y')
+            return True
+        elif(x_begin - y_begin == x_end - y_end):
+            #print('schuine verplaatsing')
+            return True
+        elif(x_begin-x_end == y_end - y_begin):
+            #print('schuine verplaatsing')
+            return True
+        else:
+            #print("no move possible")
+            return False
 
     # method to check the movement of a rook
     def check_movement_rooks(self, begin_position, end_position):
-        print('check movement of rook')
+        #print('check movement of rook')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
         if(x_begin == x_end and y_begin == y_end):
-            print('move nog possible, no movement detected')
+            #print('move nog possible, no movement detected')
             return False
         elif(x_begin == x_end):
-            print ('move possible equal x')
+            #print ('move possible equal x')
             return True
         elif(y_begin == y_end):
-            print ('move possible equal y')
+            #print ('move possible equal y')
             return True
         else:
-            print('move not possible')
+            #print('move not possible')
             return False
-        return False
 
 
 

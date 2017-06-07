@@ -2,7 +2,7 @@
 # 10780793
 # Amber Ligtvoet
 # 10909176
-# test twee drie
+
 
 from __future__ import print_function
 from copy import deepcopy
@@ -251,6 +251,7 @@ class ChessBoard:
         return True
 
     # method to check the movement of a king
+    # TODO: check for other objects
     def check_movement_kings(self, begin_position, end_position):
         #print('check movement of king')
         (x_begin, y_begin) = begin_position

@@ -181,6 +181,7 @@ class ChessBoard:
                         move = (begin_position, end_position)
                         if(self.is_legal_move(move)):
                             possible_moves.append(to_move(begin_position, end_position))
+        print('possible moves')
         print (possible_moves)
         return
 
@@ -188,13 +189,15 @@ class ChessBoard:
     # 'd2d3') whether this move is legal
     # TODO: write an implementation for this function, implement it in terms
     # of legal_moves()
+    # TODO: check method for different games
+    # TODO: check for other objects on the field
     def is_legal_move(self, move):
         (begin_position, end_position) = move
-        if(self.check_begin_position(begin_position)==False):
+        if(self.check_position(begin_position)==False):
             return False
         piece = self.get_boardpiece(begin_position)
         if(piece.material == 'p'):
-            print ('This is a pawn')
+            #print ('This is a pawn')
             if(self.check_movement_pawns(begin_position, end_position) == False):
                 return False
         elif(piece.material == 'k'):
@@ -205,32 +208,47 @@ class ChessBoard:
                 return False
         return True
 
-
-    def check_begin_position(self, begin_position):
-        piece = self.get_boardpiece(begin_position)
+    # method to check if the object in the position belongs to the player
+    def check_position(self, position):
+        piece = self.get_boardpiece(position)
         if (piece == None):
             return False
         if((piece.side == self.turn) == False):
             return False
         return True
 
+    # method checks for enemy object and returns true if enemy is detected
+    def check_for_enemy_object(self, position):
+        piece = self.get_boardpiece(position)
+        if (piece == None):
+            return False
+        if(piece.side == self.turn):
+            return False
+        else:
+            return True
+
     # method to check the movement of a pawn
+    # TODO: a hit of a pawn
     def check_movement_pawns(self, begin_position, end_position):
-        print('check_movement of pawn')
+        #print('check_movement of pawn')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
         piece = self.get_boardpiece(begin_position)
-        if(piece.side == White):
-            if((y_begin + 1 == y_end) == False):
+        if(piece.side == Side.White):
+            if((y_begin + 1 == y_end and x_begin == x_end) == False):
                 return False
-        elif(piece.side == Black):
-            if ((y_begin - 1 == y_end) == False):
+        elif(piece.side == Side.Black):
+            if ((y_begin - 1 == y_end and x_begin == x_end) == False):
                 return False
+        if(self.check_position(end_position)):
+            return False
+        if(self.check_for_enemy_object(end_position)):
+            return False
         return True
 
     # method to check the movement of a king
     def check_movement_kings(self, begin_position, end_position):
-        print('check movement of king')
+        #print('check movement of king')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
         if (x_begin == x_end and y_begin == y_end):
@@ -269,6 +287,10 @@ class ChessBoard:
         else:
             #print('move not possible')
             return False
+
+
+
+
 
 
 

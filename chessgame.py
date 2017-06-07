@@ -1,7 +1,11 @@
 # Jesper van Duuren
+# j.o.van.duuren@icloud.com
 # 10780793
 # Amber Ligtvoet
 # 10909176
+
+# TODO: Implementing evaluate board
+# TODO: Implementing MiniMax
 
 
 from __future__ import print_function

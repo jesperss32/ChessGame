@@ -171,12 +171,12 @@ class ChessBoard:
     # TODO: write an implementation for this function
     def legal_moves(self):
         possible_moves = []
-        for i in range(0, 7):
-            for j in range(0, 7):
-                print ("test legal move %d %d" % (i, j))
+        for i in range(0, 8):
+            for j in range(0, 8):
+                #print ("test legal move %d %d" % (i, j))
                 begin_position = (i,j)
-                for k in range (0, 7):
-                    for l in range (0, 7):
+                for k in range (0, 8):
+                    for l in range (0, 8):
                         end_position = (k,l)
                         move = (begin_position, end_position)
                         if(self.is_legal_move(move)):
@@ -190,21 +190,68 @@ class ChessBoard:
     # of legal_moves()
     def is_legal_move(self, move):
         (begin_position, end_position) = move
-        if(self.check_begin_position(begin_position)):
-            print ("test legal move %s %s" % (begin_position, end_position))
-        else:
+        if(self.check_begin_position(begin_position)==False):
             return False
+        piece = self.get_boardpiece(begin_position)
+        if(piece.material == 'p'):
+            print ('This is a pawn')
+            if(self.check_movement_pawns(begin_position, end_position) == False):
+                return False
+        elif(piece.material == 'k'):
+            if(self.check_movement_kings(begin_position, end_position) == False):
+                return False
+        elif(piece.material == 'r'):
+            if(self.check_movement_rooks(begin_position, end_position) == False):
+                return False
         return True
+
 
     def check_begin_position(self, begin_position):
         piece = self.get_boardpiece(begin_position)
         if (piece == None):
             return False
-        if(piece.side == self.turn):
-            print("piece available")
-        else:
+        if((piece.side == self.turn) == False):
             return False
         return True
+
+    # method to check the movement of a pawn
+    def check_movement_pawns(self, begin_position, end_position):
+        print('check_movement of pawn')
+        (x_begin, y_begin) = begin_position
+        (x_end, y_end) = end_position
+        piece = self.get_boardpiece(begin_position)
+        if(piece.side == White):
+            if((y_begin + 1 == y_end) == False):
+                return False
+        elif(piece.side == Black):
+            if ((y_begin - 1 == y_end) == False):
+                return False
+        return True
+
+    # method to check the movement of a king
+    def check_movement_kings(self, begin_position, end_position):
+        print('check movement of king')
+        return True
+
+    # method to check the movement of a rook
+    def check_movement_rooks(self, begin_position, end_position):
+        print('check movement of rook')
+        (x_begin, y_begin) = begin_position
+        (x_end, y_end) = end_position
+        if(x_begin == x_end and y_begin == y_end):
+            print('move nog possible, no movement detected')
+            return False
+        elif(x_begin == x_end):
+            print ('move possible equal x')
+            return True
+        elif(y_begin == y_end):
+            print ('move possible equal y')
+            return True
+        else:
+            print('move not possible')
+            return False
+        return False
+
 
 
 # This static class is responsible for providing functions that can calculate

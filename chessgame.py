@@ -232,51 +232,60 @@ class ChessBoard:
             return True
 
     # method to check the movement of a pawn
-    # TODO: a hit of a pawn
     def check_movement_pawns(self, begin_position, end_position):
-        #print('check_movement of pawn')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
         piece = self.get_boardpiece(begin_position)
+
         if(piece.side == Side.White):
-            if((y_begin + 1 == y_end and x_begin == x_end) == False):
-                return False
+            if((y_begin + 1 == y_end) and (x_begin -1 == x_end or x_begin+1 == x_end)):
+                if(self.check_for_enemy_object(end_position)):
+                    return True
+            if ((y_begin + 1 == y_end) and x_begin == x_end):
+                if((self.check_position(end_position)==False) and (self.check_for_enemy_object(end_position) == False)):
+                    return True
         elif(piece.side == Side.Black):
-            if ((y_begin - 1 == y_end and x_begin == x_end) == False):
-                return False
-        if(self.check_position(end_position)):
-            return False
-        if(self.check_for_enemy_object(end_position)):
-            return False
-        return True
+            if ((y_begin - 1 == y_end) and (x_begin - 1 == x_end or x_begin + 1 == x_end)):
+                if (self.check_for_enemy_object(end_position)):
+                    return True
+                if ((y_begin - 1 == y_end) and x_begin == x_end):
+                    if ((self.check_position(end_position)==False) and (self.check_for_enemy_object(end_position) == False)):
+                        return True
+        return False
 
     # method to check the movement of a king
-    # TODO: check for other objects
+    # TODO: Testing this method
     def check_movement_kings(self, begin_position, end_position):
-        #print('check movement of king')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
         if (x_begin == x_end and y_begin == y_end):
-            #print('move nog possible, no movement detected')
             return False
-        elif (x_begin == x_end):
-            #print ('move possible equal x')
-            return True
-        elif (y_begin == y_end):
-            #print ('move possible equal y')
-            return True
-        elif(x_begin - y_begin == x_end - y_end):
-            #print('schuine verplaatsing')
-            return True
-        elif(x_begin-x_end == y_end - y_begin):
-            #print('schuine verplaatsing')
-            return True
+        elif (x_begin == x_end and (y_begin + 1 == y_end or y_begin - 1 == y_end)):
+            if (self.check_for_enemy_object(end_position)):
+                 return True
+            if (self.check_position(end_position)):
+                return False
+        elif (y_begin == y_end and (x_begin + 1 == x_end or x_begin - 1 == x_end)):
+            if (self.check_for_enemy_object(end_position)):
+                 return True
+            if (self.check_position(end_position)):
+                return False
+        elif((x_begin + 1 == x_end and y_begin + 1 == y_end) or (x_begin - 1 == x_end and y_begin - 1 == y_end)):
+            if (self.check_for_enemy_object(end_position)):
+                 return True
+            if (self.check_position(end_position)):
+                return False
+        elif((x_begin - 1 == x_end and y_begin + 1 == y_end) or (x_begin + 1 == x_end and y_begin - 1 == y_end)):
+            if (self.check_for_enemy_object(end_position)):
+                 return True
+            if (self.check_position(end_position)):
+                return False
         else:
-            #print("no move possible")
             return False
 
     # method to check the movement of a rook
     # TODO: check for other objects
+    # TODO: Debug
     def check_movement_rooks(self, begin_position, end_position):
         #print('check movement of rook')
         (x_begin, y_begin) = begin_position
@@ -287,11 +296,11 @@ class ChessBoard:
             #print('move nog possible, no movement detected')
             return False
         elif(x_begin == x_end):
-            for y in range(y_begin, y_end):
+          #  for y in range(y_begin, y_end):
                 # control if no objects
             return True
         elif(y_begin == y_end):
-            for x in range(x_begin, x_end)
+           # for x in range(x_begin, x_end)
                 # control no objects
             #print ('move possible equal y')
             return True
@@ -390,6 +399,8 @@ class ChessGame:
             print("Best move: " + best_move)
             print("Score to achieve: " + str(new_score))
             print("")
+            for x in range (5,1):
+                print (x)
             self.chessboard.legal_moves()
             self.make_human_move()
 

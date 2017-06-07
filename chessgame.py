@@ -199,6 +199,7 @@ class ChessBoard:
     # of legal_moves()
     # TODO: check method for different games
     # TODO: check for other objects on the field
+    # TODO: finish rooks method
     def is_legal_move(self, move):
         (begin_position, end_position) = move
         if(self.check_position(begin_position)==False):
@@ -258,7 +259,6 @@ class ChessBoard:
         return False
 
     # method to check the movement of a king
-    # TODO: Testing this method
     def check_movement_kings(self, begin_position, end_position):
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
@@ -362,6 +362,18 @@ class ChessComputer:
     # means white is better off, while negative means black is better of
     @staticmethod
     def evaluate_board(chessboard, depth_left):
+        score_pawn = 1
+        score_rook = 5
+        score_king = 30
+        for i in range(0,8):
+            for j in range (0,8):
+                piece = chessboard.get_boardpiece((i,j))
+                if(piece == None):
+                    pass
+                elif(piece.side == Side.Black):
+                    print ('what kind of piece is this? I only know it is black')
+                elif(piece.side == Side.Black):
+                    print ('What kind of piece is this? I only know it is white')
         return 0
 
 # This class is responsible for starting the chess game, playing and user

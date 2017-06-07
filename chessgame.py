@@ -276,17 +276,23 @@ class ChessBoard:
             return False
 
     # method to check the movement of a rook
+    # TODO: check for other objects
     def check_movement_rooks(self, begin_position, end_position):
         #print('check movement of rook')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
+
+
         if(x_begin == x_end and y_begin == y_end):
             #print('move nog possible, no movement detected')
             return False
         elif(x_begin == x_end):
-            #print ('move possible equal x')
+            for y in range(y_begin, y_end):
+                # control if no objects
             return True
         elif(y_begin == y_end):
+            for x in range(x_begin, x_end)
+                # control no objects
             #print ('move possible equal y')
             return True
         else:

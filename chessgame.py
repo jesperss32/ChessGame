@@ -290,41 +290,28 @@ class ChessBoard:
     # method to check the movement of a rook
     # TODO: check for other objects
     # TODO: Debug
-            # method to check the movement of a rook
-            # TODO: check for other objects
-
     def check_movement_rooks(self, begin_position, end_position):
+        #print('check movement of rook')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
 
-        if (x_begin == x_end and y_begin == y_end):
+
+        if(x_begin == x_end and y_begin == y_end):
+            #print('move nog possible, no movement detected')
             return False
-
-        elif (x_begin == x_end):
-            for y in range(y_begin, y_end):
-                y += 1
-                if (self.check_position((x_end, y))):
-                    return False
-                elif (self.check_for_enemy_object((x_end, y))):
-                    if(y == y_end):
-                        return True
-                    else:
-                        return False
+        elif(x_begin == x_end):
+          #  for y in range(y_begin, y_end):
+                # control if no objects
             return True
-
-        elif (y_begin == y_end):
-            for x in range(x_begin, x_end):
-                x += 1
-                if (self.check_position((x, y_end))):
-                    return False
-                elif (self.check_for_enemy_object((x, y_end))):
-                    if (x == x_end):
-                        return True
-                    else:
-                        return False
+        elif(y_begin == y_end):
+           # for x in range(x_begin, x_end)
+                # control no objects
+            #print ('move possible equal y')
             return True
         else:
+            #print('move not possible')
             return False
+
 
 
 
@@ -378,16 +365,27 @@ class ChessComputer:
         score_pawn = 1
         score_rook = 5
         score_king = 30
+        score = 0
         for i in range(0,8):
             for j in range (0,8):
                 piece = chessboard.get_boardpiece((i,j))
                 if(piece == None):
                     pass
                 elif(piece.side == Side.Black):
-                    print ('what kind of piece is this? I only know it is black')
-                elif(piece.side == Side.Black):
-                    print ('What kind of piece is this? I only know it is white')
-        return 0
+                    if (piece.material == 'p'):
+                        score -= score_pawn
+                    elif (piece.material == 'r'):
+                        score -= score_rook
+                    elif (piece.material == 'k'):
+                        score -= score_king
+                elif(piece.side == Side.White):
+                    if (piece.material == 'p'):
+                        score += score_pawn
+                    elif (piece.material == 'r'):
+                        score += score_rook
+                    elif (piece.material == 'k'):
+                        score += score_king
+        return score
 
 # This class is responsible for starting the chess game, playing and user
 # feedback

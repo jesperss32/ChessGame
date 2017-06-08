@@ -290,26 +290,37 @@ class ChessBoard:
     # method to check the movement of a rook
     # TODO: check for other objects
     # TODO: Debug
+
     def check_movement_rooks(self, begin_position, end_position):
-        #print('check movement of rook')
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
 
-
-        if(x_begin == x_end and y_begin == y_end):
-            #print('move nog possible, no movement detected')
+        if (x_begin == x_end and y_begin == y_end):
             return False
-        elif(x_begin == x_end):
-          #  for y in range(y_begin, y_end):
-                # control if no objects
+
+        elif (x_begin == x_end):
+            for y in range(y_begin, y_end):
+                y += 1
+                if (self.check_position((x_end, y))):
+                    return False
+                elif (self.check_for_enemy_object((x_end, y))):
+                    if (y == y_end):
+                        return True
+                    else:
+                        return False
             return True
-        elif(y_begin == y_end):
-           # for x in range(x_begin, x_end)
-                # control no objects
-            #print ('move possible equal y')
+        elif (y_begin == y_end):
+            for x in range(x_begin, x_end):
+                x += 1
+                if (self.check_position((x, y_end))):
+                    return False
+                elif (self.check_for_enemy_object((x, y_end))):
+                    if (x == x_end):
+                        return True
+                    else:
+                        return False
             return True
         else:
-            #print('move not possible')
             return False
 
 

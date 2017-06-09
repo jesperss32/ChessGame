@@ -3,11 +3,6 @@
 # Amber Ligtvoet
 # 10909176
 
-# TODO: Implementing evaluate board
-# TODO: Implementing MiniMax
-# TODO: implementing alfabeta
-
-
 from __future__ import print_function
 from copy import deepcopy
 import sys
@@ -43,7 +38,7 @@ def to_move(from_coord, to_coord):
 # - Side.White
 # - Side.Black
 class Material:
-    Rook, King, Pawn, Queen = ['r','k','p','q']
+    Rook, King, Pawn, Queen, Bishop  = ['r','k','p','q','b']
 class Side:
     White, Black = range(0,2)
 
@@ -195,10 +190,7 @@ class ChessBoard:
 
     # This function should return, given the move specified (in the format
     # 'd2d3') whether this move is legal
-    # TODO: write an implementation for this function, implement it in terms
     # of legal_moves()
-    # TODO: check method for different games
-    # TODO: check for other objects on the field
     def is_legal_move(self, move):
         (begin_position, end_position) = move
         if(self.check_position(begin_position)==False):
@@ -214,9 +206,12 @@ class ChessBoard:
         elif(piece.material == 'r'):
             if(self.check_movement_rooks(begin_position, end_position) == False):
                 return False
-        # elif(piece.material == 'q'):
-        #    if(self.check_movement_queens(begin_position, end_position) == False):
-        #    return False
+        elif(piece.material == 'q'):
+            if(self.check_movement_queens(begin_position, end_position) == False):
+                return False
+        elif (piece.material == 'b'):
+            if (self.check_movement_bishop(begin_position, end_position) == False):
+                return False
         return True
 
     # method to check if the object in the position belongs to the player
@@ -290,9 +285,6 @@ class ChessBoard:
             return False
 
     # method to check the movement of a rook
-    # TODO: check for other objects
-    # TODO: Debug
-
     def check_movement_rooks(self, begin_position, end_position):
         (x_begin, y_begin) = begin_position
         (x_end, y_end) = end_position
@@ -325,6 +317,65 @@ class ChessBoard:
         else:
             return False
 
+    # method to check te movement of a queen
+    def check_movement_queens(self, begin_position, end_position):
+        (x_begin, y_begin) = begin_position
+        (x_end, y_end) = end_position
+
+        if (x_begin == x_end and y_begin == y_end):
+            return False
+
+        elif(x_begin == x_end):
+            for y in range(y_begin, y_end):
+                y = +1 or -1
+                if (self.check_position((x_end, y))):
+                    return False
+                elif (self.check_for_enemy_object((x_end, y))):
+                    if (y == y_end):
+                        return True
+                    else:
+                        return False
+            return True
+
+        elif (y_begin == y_end):
+            for x in range(x_begin, x_end):
+                x = +1 or -1
+                if (self.check_position((x, y_end))):
+                    return False
+                elif (self.check_for_enemy_object((x, y_end))):
+                    if (x == x_end):
+                        return True
+                    else:
+                        return False
+            return True
+        else:
+            return False
+
+    # method to check te movement of a bishop
+    def check_movement_bishop(self, begin_position, end_position):
+        (x_begin, y_begin) = begin_position
+        (x_end, y_end) = end_position
+
+        if (x_begin == x_end and y_begin == y_end):
+            return False
+        elif (x_begin == x_end):
+            return False
+        elif (y_begin == y_end):
+            return False
+        elif (x_begin != x_end) and (y_begin != y_end):
+            for x in range(x_begin,x_end):
+                x = +1
+                for y in range(y_begin,y_end):
+                    y = +1
+                    return True
+                else:
+                    for x in range(x_begin, x_end):
+                        x = -1
+                    for y in range(y_begin, y_end):
+                        y = -1
+                        return True
+            else:
+                return False
 
 
 # This static class is responsible for providing functions that can calculate
@@ -341,7 +392,6 @@ class ChessComputer():
         if alphabeta:
             inf = 99999999
             min_inf = -inf
-            print('inf number')
             return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
         else:
             return ChessComputer.minimax(chessboard, depth)
@@ -356,13 +406,12 @@ class ChessComputer():
     @staticmethod
     def node(object):
         self.depth = depth
-        self.side = 0
-            if(self.side == Side.White):
-                side -= 1
-            elif(self.side == Side.Black):
-                side += 1
+        #sideNumber = 0
+           # if((Side.White) == True):
+                #sideNumber -= 1
+            #elif((Side.Black) == True):
+             #   sideNumber += 1
         self.score = score
-        self.value = value
         self.children = []
         self.CreateChildren()
         print("create nodes")
@@ -376,17 +425,17 @@ class ChessComputer():
         print("create children")
 
     @staticmethod
-    def RealVal(self, value):
-        if(value == 0):
-            print('realvalue')
-            return maxsize * self.side
+    def RealVal(self, score):
+        if(score == 0):
+            print('realscore')
+            return maxsize * sideNumber
         elif(value < 0):
-            return maxsize * -self.side
+            return max_depth * -sideNumber
         return 0
 
     @staticmethod
     def minimax(node, depth, side):
-        if(depth == 0) or (abs(node.value) == maxsize):
+        if(depth == 0) or (abs(node.value) == max_depth):
             print("minimax!!")
             return node.value
 
@@ -395,12 +444,12 @@ class ChessComputer():
         for i in range(len(node.children)):
             child = node.children[i]
             value = minimax(child, depth - 1, -sideNumber)
-            if(abs(maxsize * sideNumber - value) < abs(maxsize * sideNumber - bestValue)):
-                bestValue = value
-                print("value")
-                return bestValue
-            else:
-                return (0, "minimax")
+           # if(abs( * sideNumber - value) < abs(maxsize * sideNumber - bestValue)):
+            #    bestValue = value
+             #   print("value")
+              #  return bestValue
+            # else:
+             #   return (value, "minimax")
 
     # This function uses alphabeta to calculate the next move. Given the
     # chessboard and max depth, this function should return a tuple of the
@@ -410,6 +459,9 @@ class ChessComputer():
     # of a specific board configuration after the max depth is reached
     @staticmethod
     def alphabeta(chessboard, depth, alpha, beta):
+        depth += 1
+       # if(depth == self.max_depth):
+
         return (0, "alfabeta nog maken")
 
     # Calculates the score of a given board configuration based on the
@@ -420,8 +472,9 @@ class ChessComputer():
     def evaluate_board(chessboard, depth_left):
         score_pawn = 1
         score_rook = 5
-        # score queen = 8
-        score_king = 30
+        score_bishop = 6
+        score_queen = 8
+        score_king = 40
         score = 0
         for i in range(0,8):
             for j in range (0,8):
@@ -442,6 +495,7 @@ class ChessComputer():
                         score += score_rook
                     elif (piece.material == 'k'):
                         score += score_king
+
         return score
 
 # This class is responsible for starting the chess game, playing and user
@@ -452,6 +506,7 @@ class ChessGame:
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
         self.depth = 4
+        max_depth = 4
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename

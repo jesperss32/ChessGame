@@ -1,11 +1,11 @@
 # Jesper van Duuren
-# j.o.van.duuren@icloud.com
 # 10780793
 # Amber Ligtvoet
 # 10909176
 
 # TODO: Implementing evaluate board
 # TODO: Implementing MiniMax
+# TODO: implementing alfabeta
 
 
 from __future__ import print_function
@@ -43,7 +43,7 @@ def to_move(from_coord, to_coord):
 # - Side.White
 # - Side.Black
 class Material:
-    Rook, King, Pawn = ['r','k','p']
+    Rook, King, Pawn, Queen = ['r','k','p','q']
 class Side:
     White, Black = range(0,2)
 
@@ -199,7 +199,6 @@ class ChessBoard:
     # of legal_moves()
     # TODO: check method for different games
     # TODO: check for other objects on the field
-    # TODO: finish rooks method
     def is_legal_move(self, move):
         (begin_position, end_position) = move
         if(self.check_position(begin_position)==False):
@@ -215,6 +214,9 @@ class ChessBoard:
         elif(piece.material == 'r'):
             if(self.check_movement_rooks(begin_position, end_position) == False):
                 return False
+        # elif(piece.material == 'q'):
+        #    if(self.check_movement_queens(begin_position, end_position) == False):
+        #    return False
         return True
 
     # method to check if the object in the position belongs to the player
@@ -325,13 +327,9 @@ class ChessBoard:
 
 
 
-
-
-
-
 # This static class is responsible for providing functions that can calculate
 # the optimal move using minimax
-class ChessComputer:
+class ChessComputer():
 
     # This method uses either alphabeta or minimax to calculate the best move
     # possible. The input needed is a chessboard configuration and the max
@@ -343,20 +341,63 @@ class ChessComputer:
         if alphabeta:
             inf = 99999999
             min_inf = -inf
+            print('inf number')
             return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
         else:
             return ChessComputer.minimax(chessboard, depth)
 
-
     # This function uses minimax to calculate the next move. Given the current
     # chessboard and max depth, this function should return a tuple of the
     # the score and the move that should be executed
+    # depth bounded mini max
     # NOTE: use ChessComputer.evaluate_board() to calculate the score
     # of a specific board configuration after the max depth is reached
     # TODO: write an implementation for this function
     @staticmethod
-    def minimax(chessboard, depth):
-        return (0, "no implementation written")
+    def node(object):
+        self.depth = depth
+        self.side = side
+
+        self.score = score
+        self.value = value
+        self.children = []
+        self.CreateChildren()
+        print("create nodes")
+
+    @staticmethod
+    def CreateChildren(self):
+        if self.depth >= 0:
+            for i in range(0, 1):
+                v = self.score - i
+                self.children.append(node(self.depth -1 , -self.side, v, self.RealVal(v)))
+        print("create children")
+
+    @staticmethod
+    def RealVal(self, value):
+        if(value == 0):
+            print('realvalue')
+            return maxsize * self.side
+        elif(value < 0):
+            return maxsize * -self.side
+        return 0
+
+    @staticmethod
+    def minimax(node, depth, side):
+        if(depth == 0) or (abs(node.value) == maxsize):
+            print("minimax!!")
+            return node.value
+
+        bestValue = maxsize * side
+
+        for i in range(len(node.children)):
+            child = node.children[i]
+            value = minimax(child, depth - 1, -sideNumber)
+            if(abs(maxsize * sideNumber - value) < abs(maxsize * sideNumber - bestValue)):
+                bestValue = value
+                print("value")
+                return bestValue
+            else:
+                return (0, "minimax")
 
     # This function uses alphabeta to calculate the next move. Given the
     # chessboard and max depth, this function should return a tuple of the
@@ -366,15 +407,17 @@ class ChessComputer:
     # of a specific board configuration after the max depth is reached
     @staticmethod
     def alphabeta(chessboard, depth, alpha, beta):
-        return (0, "no implementation written")
+        return (0, "alfabeta nog maken")
 
     # Calculates the score of a given board configuration based on the
     # material left on the board. Returns a score number, in which positive
     # means white is better off, while negative means black is better of
+    # TODO: implementeer depth_left
     @staticmethod
     def evaluate_board(chessboard, depth_left):
         score_pawn = 1
         score_rook = 5
+        # score queen = 8
         score_king = 30
         score = 0
         for i in range(0,8):
@@ -453,7 +496,7 @@ class ChessGame:
         # Endlessly request input until the right input is specified
         while True:
             if sys.version_info[:2] <= (2, 7):
-                move = raw_input("Indicate your move (or q to stop): ")
+                move = input("Indicate your move (or q to stop): ")
             else:
                 move = input("Indicate your move (or q to stop): ")
             if move == "q":

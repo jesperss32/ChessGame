@@ -436,7 +436,7 @@ class ChessComputer():
     @staticmethod
     def minimax(node, depth, side):
         if(depth == 0) or (abs(node.value) == max_depth):
-            print("minimax!!!")
+            print("minimax!!")
             return node.value
 
         bestValue = maxsize * side

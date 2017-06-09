@@ -2,6 +2,7 @@
 # 10780793
 # Amber Ligtvoet
 # 10909176
+#
 
 # TODO: Implementing evaluate board
 # TODO: Implementing MiniMax
@@ -356,8 +357,11 @@ class ChessComputer():
     @staticmethod
     def node(object):
         self.depth = depth
-        self.side = side
-
+        self.side = 0
+            if(self.side == Side.White):
+                side -= 1
+            elif(self.side == Side.Black):
+                side += 1
         self.score = score
         self.value = value
         self.children = []
